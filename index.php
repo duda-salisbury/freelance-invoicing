@@ -2,6 +2,9 @@
 
 // Include necessary files
 require_once 'controllers/ClientController.php';
+require_once 'controllers/InvoiceController.php';
+require_once 'models/Client.php';
+require_once 'models/Invoice.php';
 
 // Initialize SQLite database
 $db = new SQLite3('invoices.db');
@@ -51,6 +54,22 @@ switch ($segments[0]) {
                 break;
             default:
                 // Handle unknown client routes
+                header("HTTP/1.0 404 Not Found");
+                echo '404 Not Found';
+                break;
+        }
+        break;
+    case 'invoice':
+        // Handle invoice routes
+        switch ($segments[1]) {
+            case 'create':
+                $clientId = $segments[2];
+                $client = (new Client($db))->find($clientId);
+                $invoiceController = new InvoiceController($db);
+                $invoiceController->create($client);
+                break;
+            default:
+                // Handle unknown invoice routes
                 header("HTTP/1.0 404 Not Found");
                 echo '404 Not Found';
                 break;
