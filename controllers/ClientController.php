@@ -1,38 +1,56 @@
 <?php
 
-require_once 'Client.php';
+require_once 'models/Client.php';
 
 class ClientController {
+    private $db;
     private $clientModel;
 
     public function __construct($db) {
+        $this->db = $db;
         $this->clientModel = new Client($db);
     }
 
+    // List all clients
+    public function index() {
+        $stmt = $this->db->prepare("SELECT * FROM clients");
+        $result = $stmt->execute();
+        $clients = array();
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $clients[] = $row;
+        }
+
+        include 'views/client/list.php';
+    }
+
     // Create a new client
-    public function createClient($userId, $name, $email, $billingAddress) {
-        // Perform input validation
-        // Call the createClient method from the Client model to insert the client into the database
-        // Return appropriate response based on success or failure
+    public function create() {
+        include 'views/client/create.php';
     }
 
-    // Retrieve a client by ID
-    public function getClientById($clientId) {
-        // Call the getClientById method from the Client model to retrieve the client from the database
-        // Return the client data
+    public function store($id=0,$user_id, $name, $email, $billing_address){
+        $this->clientModel->save($id,$user_id, $name, $email, $billing_address);
+        header('Location: /client/list');
     }
 
-    // Update a client's information
-    public function updateClient($clientId, $name, $email, $billingAddress) {
-        // Perform input validation
-        // Call the updateClient method from the Client model to update the client's information in the database
-        // Return appropriate response based on success or failure
+    // Show a specific client
+    public function show($clientId) {
+        $client = $this->clientModel->find($clientId);
+        include 'views/client/show.php';
+
+    }
+
+    // Update a client
+    public function edit($id) {
+        $clientId = $id;
+        $client = $this->clientModel->find($clientId);
+        include 'views/client/edit.php';
     }
 
     // Delete a client
-    public function deleteClient($clientId) {
-        // Call the deleteClient method from the Client model to delete the client from the database
-        // Return appropriate response based on success or failure
+    public function destroy($clientId) {
+        $this->clientModel->delete($clientId);
+        header('Location: /client/list');
     }
 }
 
