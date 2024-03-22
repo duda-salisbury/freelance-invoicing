@@ -23,6 +23,11 @@ $segments = explode('/', trim($requestUri, '/'));
 
 // Define custom routes
 switch ($segments[0]) {
+    case '':
+        // Handle home route
+        echo 'Welcome to the home page';
+        break;
+
     case 'client':
         // Handle client routes
         switch ($segments[1]) {
@@ -75,6 +80,56 @@ switch ($segments[0]) {
                 break;
         }
         break;
+    case 'invoiceItem':
+        // Handle invoice item routes
+        switch ($segments[1]) {
+            case 'create':
+                $invoiceId = $segments[2];
+                $invoiceItemController = new InvoiceItemController($db);
+                $invoiceItemController->create($invoiceId);
+                break;
+            case 'store':
+                $id = $_POST['id'] ?? 0;
+                $invoiceId = $_POST['invoice_id'];
+                $description = $_POST['description'];
+                $quantity = $_POST['quantity'];
+                $unitPrice = $_POST['unit_price'];
+                $total = $_POST['total'];
+
+                $invoiceItemController = new InvoiceItemController($db);
+                $invoiceItemController->store($id, $invoiceId, $description, $quantity, $unitPrice, $total);
+                break;
+            case 'edit':
+                $id = $segments[2];
+                $invoiceItemController = new InvoiceItemController($db);
+                $invoiceItemController->edit($id);
+                break;
+            case 'update':
+                $id = $_POST['id'];
+                $invoiceId = $_POST['invoice_id'];
+                $description = $_POST['description'];
+                $quantity = $_POST['quantity'];
+                $unitPrice = $_POST['unit_price'];
+                $total = $_POST['total'];
+
+                $invoiceItemController = new InvoiceItemController($db);
+                $invoiceItemController->update($id, $invoiceId, $description, $quantity, $unitPrice, $total);
+                break;
+            case 'destroy':
+                $id = $segments[2];
+                $invoiceId = $segments[3];
+                $invoiceItemController = new InvoiceItemController($db);
+                $invoiceItemController->destroy($id, $invoiceId);
+                break;
+            default:
+                // Handle unknown invoice item routes
+                header("HTTP/1.0 404 Not Found");
+                echo '404 Not Found';
+                break;
+        }
+        break;
+
+
     default:
         // Handle unknown routes
         header("HTTP/1.0 404 Not Found");

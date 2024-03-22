@@ -13,4 +13,15 @@ class InvoiceController {
         $client = $client;
         include 'views/invoice/create.php';
     }
+
+    public function store($id, $clientId, $invoiceDate, $dueDate, $total) {
+        $invoice = new Invoice($this->db);
+        $invoice->save($id, $clientId, $invoiceDate, $dueDate, $total);
+
+        // loop through the invoice items and save them
+        $invoiceItemController = new InvoiceItemController($this->db);
+        
+
+        header('Location: /client/show/' . $clientId);
+    }
 }
