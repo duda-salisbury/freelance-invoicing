@@ -68,6 +68,18 @@ class InvoiceItem {
         return $stmt->execute();
     }
 
+    // Get all invoice items for an invoice
+    public function all($invoiceId) {
+        $stmt = $this->db->prepare("SELECT * FROM invoice_items WHERE invoice_id = :invoice_id");
+        $stmt->bindValue(':invoice_id', $invoiceId, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        $invoiceItems = [];
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $invoiceItems[] = $row;
+        }
+        return $invoiceItems;
+    }
+
     
   
 }

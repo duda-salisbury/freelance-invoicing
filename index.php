@@ -3,6 +3,7 @@
 // Include necessary files
 require_once 'controllers/ClientController.php';
 require_once 'controllers/InvoiceController.php';
+require_once 'controllers/InvoiceItemController.php';
 require_once 'models/Client.php';
 require_once 'models/Invoice.php';
 
@@ -72,6 +73,29 @@ switch ($segments[0]) {
                 $client = (new Client($db))->find($clientId);
                 $invoiceController = new InvoiceController($db);
                 $invoiceController->create($client);
+                break;
+
+            case 'store':
+                $id = $_POST['id'] ?? 0;
+                $clientId = $_POST['client_id'];
+                $invoiceDate = $_POST['invoice_date'];
+                $dueDate = $_POST['due_date'];
+                $total = $_POST['total'];
+
+                $invoiceController = new InvoiceController($db);
+                $invoiceController->store($id, $clientId, $invoiceDate, $dueDate, $total);
+
+                foreach ($_POST['description'] as $key => $description) {
+                    $invoiceItemController = new InvoiceItemController($db);
+                    $invoiceItemController->store(0, $id, $description, $_POST['quantity'][$key], $_POST['unit_price'][$key], $_POST['total'][$key]);
+                }
+
+                break;
+
+            case 'show':
+                $invoiceController = new InvoiceController($db);
+                // load the view
+                $invoiceController->show($segments[2]);
                 break;
             default:
                 // Handle unknown invoice routes

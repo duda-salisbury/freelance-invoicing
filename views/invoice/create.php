@@ -14,38 +14,61 @@
             </div>
         </div>
 
-        <!-- table for items -->
-        <table id="invoice-items-table">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody id="invoice-items">
-                <tr>
-                    <td><input type="text" name="description[]" class="form-control" required></td>
-                    <td><input type="number" name="quantity[]" class="form-control" required></td>
-                    <td><input type="number" name="unit_price[]" class="form-control" required></td>
-                    <td><input type="number" name="total[]" class="form-control" required readonly></td>
-                </tr>
-            </tbody>
+        <!-- form for invoice details -->
+        <form action="/invoice/store" method="post">
+            <input type="hidden" name="client_id" value="<?php echo $client['id']; ?>">
+            <div class="form-group" id="invoice-details">
+                <label for="invoice_date">Invoice Date</label>
+                <input type="date" value="<?php echo date('Y-m-d'); ?>" name="invoice_date" class="form-control" required>
+            </div>
 
-            <!-- button to add new row -->
-            <tfoot>
-                <tr>
-                    <td colspan="4">
-                        <button type="button" class="btn btn-primary" onclick="addRow()">Add Item</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">Total</td>
-                    <td><input type="number" name="total_amount" id="total_amount" class="form-control" required readonly></td>
-                </tr>
-            </tfoot>
-        </table>
+            <div class="form-group my-3">
+                <label for="due_date">Due Date</label>
+                <input type="date" name="due_date" class="form-control" required>
+            </div>
+
+            <div class="form-group my-3">
+                <label for="notes">Notes</label>
+                <textarea name="notes" class="form-control"></textarea>
+            </div>
+            <div class="form-group my-3">
+                <h3>Invoice Items</h3>
+                <!-- table for items -->
+                <table id="invoice-items-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-items">
+                        <tr>
+                            <td><input type="text" name="description[]" class="form-control" required></td>
+                            <td><input type="number" name="quantity[]" class="form-control" required></td>
+                            <td><input type="number" name="unit_price[]" class="form-control" required></td>
+                            <td><input type="number" name="total[]" class="form-control" required readonly></td>
+                        </tr>
+                    </tbody>
+
+                    <!-- button to add new row -->
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <button type="button" class="btn btn-primary" onclick="addRow()">Add Item</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Total</td>
+                            <td><input type="number" name="total_amount" id="total_amount" class="form-control" required readonly></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Invoice</button>
+        </form>
     </div>
 </div>
 
