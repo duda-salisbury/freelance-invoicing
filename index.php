@@ -83,7 +83,7 @@ switch ($segments[0]) {
                 $total = $_POST['total'];
 
                 $invoiceController = new InvoiceController($db);
-                $invoiceController->store($id, $clientId, $invoiceDate, $dueDate, $total);
+                $id = $invoiceController->store($id, $clientId, $invoiceDate, $dueDate, $total);
 
                 foreach ($_POST['description'] as $key => $description) {
                     $invoiceItemController = new InvoiceItemController($db);

@@ -79,9 +79,6 @@ class InvoiceItem {
         }
         return $invoiceItems;
     }
-
-    
-  
 }
 
 ?>

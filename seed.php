@@ -40,6 +40,16 @@ $db->exec("CREATE TABLE IF NOT EXISTS invoices (
     FOREIGN KEY (client_id) REFERENCES clients(id)
 )");
 
+// Create Payments table
+$db->exec("CREATE TABLE IF NOT EXISTS payments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    invoice_id INTEGER NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    payment_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (invoice_id) REFERENCES invoices(id)
+)");
+
 // Create invoice_items table
 $db->exec("CREATE TABLE IF NOT EXISTS invoice_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
