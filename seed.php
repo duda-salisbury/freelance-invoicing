@@ -25,6 +25,17 @@ $db->exec("CREATE TABLE IF NOT EXISTS clients (
     FOREIGN KEY (user_id) REFERENCES users(id)
 )");
 
+// Create a table to store all the notifications
+$db->exec("CREATE TABLE IF NOT EXISTS notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    invoice_id INTEGER NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    type TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)");
+
 // Create invoices table
 $db->exec("CREATE TABLE IF NOT EXISTS invoices (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

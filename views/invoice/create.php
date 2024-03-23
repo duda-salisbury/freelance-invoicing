@@ -34,13 +34,16 @@
             <div class="form-group my-3">
                 <h3>Invoice Items</h3>
                 <!-- table for items -->
-                <table id="invoice-items-table">
+                <table 
+                    class="table table-bordered table-striped"
+                id="invoice-items-table">
                     <thead>
                         <tr>
                             <th>Item</th>
                             <th>Quantity</th>
                             <th>Unit Price</th>
                             <th>Subtotal</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="invoice-items">
@@ -48,14 +51,20 @@
                             <td><input type="text" name="description[]" class="form-control" required></td>
                             <td><input type="number" name="quantity[]" class="form-control" required></td>
                             <td><input type="number" name="unit_price[]" class="form-control" required></td>
-                            <td><input type="number" name="total[]" class="form-control" required readonly></td>
+                            <td>
+                                <span class="subtotal">0.00</span>
+                            </td>
+                            <td> <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
                         </tr>
                     </tbody>
 
                     <!-- button to add new row -->
                     <tfoot>
                         <tr>
-                            <td colspan="4">
+
+                            <td 
+                            colspan="5"
+                            align="right">
                                 <button type="button" class="btn btn-primary" onclick="addRow()">Add Item</button>
                             </td>
                         </tr>
@@ -81,29 +90,44 @@
             <td><input type="text" name="description[]" class="form-control" required></td>
             <td><input type="number" name="quantity[]" class="form-control" required></td>
             <td><input type="number" name="unit_price[]" class="form-control" required></td>
-            <td><input type="number" name="total[]" class="form-control" required readonly></td>
+            <td>
+                <span class="subtotal">0.00</span>
+            </td>
+            <td> <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
         `;
         tbody.appendChild(tr);
+    }
+
+    function removeRow(button) {
+        var tr = button.closest('tr');
+        tr.remove();
+
+        // also recalculate the total
+        var subtotals = Array.from(document.querySelectorAll('.subtotal'));
+        var total = subtotals.reduce((acc, subtotal) => acc + parseFloat(subtotal.textContent), 0);
+        document.getElementById('total_amount').value = total.toFixed(2);
+
     }
 </script>
 
 <script>
-    // Calculate subtotal and total amount
-    document.addEventListener("input", function(event) {
-        if (event.target.tagName === 'INPUT') {
-            var quantity = event.target.parentNode.parentNode.querySelector("input[name='quantity[]']").value;
-            var unit_price = event.target.parentNode.parentNode.querySelector("input[name='unit_price[]']").value;
-            var subtotal = quantity * unit_price;
-            event.target.parentNode.parentNode.querySelector("input[name='total[]']").value = subtotal;
+    // calculate subtotal and total when an input changes
+    document.getElementById('invoice-items-table').addEventListener('input', function(e) {
+        var target = e.target;
+        if (target.tagName === 'INPUT') {
+            var tr = target.closest('tr');
+            var quantity = tr.querySelector('input[name="quantity[]"]').value;
+            var unitPrice = tr.querySelector('input[name="unit_price[]"]').value;
+            var subtotal = quantity * unitPrice;
+            tr.querySelector('.subtotal').textContent = subtotal.toFixed(2);
 
-            // Calculate total amount
-            var total_amount = 0;
-            document.querySelectorAll("input[name='total[]']").forEach(function(input) {
-                total_amount += parseFloat(input.value);
-            });
-            document.getElementById("total_amount").value = total_amount;
+            var subtotals = Array.from(document.querySelectorAll('.subtotal'));
+            var total = subtotals.reduce((acc, subtotal) => acc + parseFloat(subtotal.textContent), 0);
+            document.getElementById('total_amount').value = total.toFixed(2);
         }
     });
+
+
 </script>
 
 <?php include 'views/includes/footer.php'; ?>

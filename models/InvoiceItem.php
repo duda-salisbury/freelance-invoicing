@@ -37,25 +37,23 @@ class InvoiceItem {
 
     // Create a new invoice item
 
-    private function create($invoiceId, $description, $quantity, $unitPrice, $total) {
-        $stmt = $this->db->prepare("INSERT INTO invoice_items (invoice_id, description, quantity, unit_price, total) VALUES (:invoice_id, :description, :quantity, :unit_price, :total)");
+    private function create($invoiceId, $description, $quantity, $unitPrice) {
+        $stmt = $this->db->prepare("INSERT INTO invoice_items (invoice_id, description, quantity, unit_price) VALUES (:invoice_id, :description, :quantity, :unit_price)");
         $stmt->bindValue(':invoice_id', $invoiceId, SQLITE3_INTEGER);
         $stmt->bindValue(':description', $description, SQLITE3_TEXT);
         $stmt->bindValue(':quantity', $quantity, SQLITE3_INTEGER);
         $stmt->bindValue(':unit_price', $unitPrice, SQLITE3_FLOAT);
-        $stmt->bindValue(':total', $total, SQLITE3_FLOAT);
         $stmt->execute();
         return $this->db->lastInsertRowID();
     }
 
     // Update an invoice item
 
-    private function update($id, $description, $quantity, $unitPrice, $total) {
-        $stmt = $this->db->prepare("UPDATE invoice_items SET description = :description, quantity = :quantity, unit_price = :unit_price, total = :total WHERE id = :id");
+    private function update($id, $description, $quantity, $unitPrice) {
+        $stmt = $this->db->prepare("UPDATE invoice_items SET description = :description, quantity = :quantity, unit_price = :unit_price WHERE id = :id");
         $stmt->bindValue(':description', $description, SQLITE3_TEXT);
         $stmt->bindValue(':quantity', $quantity, SQLITE3_INTEGER);
         $stmt->bindValue(':unit_price', $unitPrice, SQLITE3_FLOAT);
-        $stmt->bindValue(':total', $total, SQLITE3_FLOAT);
         $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
         return $stmt->execute();
     }

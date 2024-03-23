@@ -1,8 +1,11 @@
 <?php include 'views/includes/header.php'; ?>
 
+
+
 <div class="row">
     <div class="col">
-        <h2>List of Clients</h2>
+        <?php if (!empty($clients)): ?>
+        <h2>Clients</h2>
         <table class="table">
             <thead>
                 <tr>
@@ -24,7 +27,7 @@
                     <td>
                         <!-- create invoice -->
                         <a href="/invoice/create/<?php echo $client['id']; ?>" class="btn btn-success btn-sm">Create Invoice</a>
-                        <a href="/client/show/<?php echo $client['id']; ?>" class="btn btn-primary btn-sm">Invoice History</a>
+                        <a href="/client/show/<?php echo $client['id']; ?>" class="btn btn-primary btn-sm">View Client</a>
                     </td>
                     <td>
                         <a href="/client/edit/<?php echo $client['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
@@ -34,6 +37,11 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <?php else: ?>
+            <div class="alert alert-info" role="alert">
+                No clients found. <a href="/client/create">Add a new client</a>
+            </div>
+        <?php endif; ?>
         <a href="/client/create" class="btn btn-success">Add New Client</a>
     </div>
 </div>
