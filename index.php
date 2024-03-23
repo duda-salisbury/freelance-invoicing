@@ -80,15 +80,12 @@ switch ($segments[0]) {
                 $clientId = $_POST['client_id'];
                 $invoiceDate = $_POST['invoice_date'];
                 $dueDate = $_POST['due_date'];
-                $total = $_POST['total'];
+                $total = $_POST['total_amount'];
 
                 $invoiceController = new InvoiceController($db);
                 $id = $invoiceController->store($id, $clientId, $invoiceDate, $dueDate, $total);
 
-                foreach ($_POST['description'] as $key => $description) {
-                    $invoiceItemController = new InvoiceItemController($db);
-                    $invoiceItemController->store(0, $id, $description, $_POST['quantity'][$key], $_POST['unit_price'][$key], $_POST['total'][$key]);
-                }
+
 
                 break;
 
@@ -118,7 +115,7 @@ switch ($segments[0]) {
                 $description = $_POST['description'];
                 $quantity = $_POST['quantity'];
                 $unitPrice = $_POST['unit_price'];
-                $total = $_POST['total'];
+                $total = $_POST['total_amount'];
 
                 $invoiceItemController = new InvoiceItemController($db);
                 $invoiceItemController->store($id, $invoiceId, $description, $quantity, $unitPrice, $total);

@@ -17,8 +17,9 @@ class InvoiceController {
     public function store($id, $clientId, $invoiceDate, $dueDate, $total) {
         $invoice = new Invoice($this->db);
         $invoice->save($id, $clientId, $invoiceDate, $dueDate, $total);
-        
-        return $invoice->id;
+
+        // redirect to the invoice show page
+        header('Location: /invoice/show/' . $invoice->id);
     }
 
     public function show($id) {

@@ -17,6 +17,7 @@
         <!-- form for invoice details -->
         <form action="/invoice/store" method="post">
             <input type="hidden" name="client_id" value="<?php echo $client['id']; ?>">
+            
             <div class="form-group" id="invoice-details">
                 <label for="invoice_date">Invoice Date</label>
                 <input type="date" value="<?php echo date('Y-m-d'); ?>" name="invoice_date" class="form-control" required>
