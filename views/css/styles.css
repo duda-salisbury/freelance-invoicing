@@ -1,0 +1,29 @@
+/** css vars, primary 2ab5a5 */
+:root {
+    --primary: #2ab5a5;
+    --secondary: #747474;
+    --tertiary: #f4f4f4;
+    --dark: #333;
+    --light: #fff;
+    --danger: #dc3545;
+    --success: #28a745;
+    --warning: #ffc107;
+    --info: #17a2b8;
+}
+
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.text-primary {
+    color: var(--primary) !important;
+}
+
+.bg-secondary {
+    background-color: var(--secondary) !important;
+}
+
+.text-secondary {
+    color: var(--secondary) !important;
+}
+

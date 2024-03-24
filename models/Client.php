@@ -60,6 +60,16 @@ class Client {
         $stmt->bindValue(':id', $clientId, SQLITE3_INTEGER);
         return $stmt->execute();
     }
+
+    public function all(){
+        $stmt = $this->db->prepare("SELECT * FROM clients");
+        $result = $stmt->execute();
+        $clients = array();
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $clients[] = $row;
+        }
+        return $clients;
+    }
 }
 
 ?>

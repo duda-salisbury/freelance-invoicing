@@ -4,6 +4,7 @@
 require_once 'controllers/ClientController.php';
 require_once 'controllers/InvoiceController.php';
 require_once 'controllers/InvoiceItemController.php';
+require_once 'controllers/DashboardController.php';
 require_once 'models/Client.php';
 require_once 'models/Invoice.php';
 
@@ -26,7 +27,9 @@ $segments = explode('/', trim($requestUri, '/'));
 switch ($segments[0]) {
     case '':
         // Handle home route
-        echo 'Welcome to the home page';
+        $dashboardController = new DashboardController($db);
+        $dashboardController->index();
+        
         break;
 
     case 'client':
