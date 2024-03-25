@@ -2,26 +2,50 @@
 
 class Client {
     private $db;
+    private $id;
+    private $userId;
+    private $name;
+    private $email;
+    private $billingAddress;
 
-    public function __construct($db) {
+
+    public function __construct($db, $id=0) {
         $this->db = $db;
-    }
 
-    // Save or update a client
-    public function save($id, $userId, $name, $email, $billingAddress) {
-        if ($this->exists($id)) {
-            return $this->update($id, $name, $email, $billingAddress);
+
+        if ($id > 0) {
+            $this->id = $id;
+            $stmt = $this->db->prepare("SELECT * FROM clients WHERE id = :id");
+            $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+            $result = $stmt->execute();
+
+            $row = $result->fetchArray(SQLITE3_ASSOC);
+            $this->userId = $row['user_id'];
+            $this->name = $row['name'];
+            $this->email = $row['email'];
+            $this->billingAddress = $row['billing_address'];
         } else {
-            return $this->create($userId, $name, $email, $billingAddress);
+            $this->id = 0;
+            $this->userId = 0;
+            $this->name = '';
+            $this->email = '';
+            $this->billingAddress = '';
         }
     }
 
-    // Find a client by ID
-    public function find($clientId) {
-        $stmt = $this->db->prepare("SELECT * FROM clients WHERE id = :id");
-        $stmt->bindValue(':id', $clientId, SQLITE3_INTEGER);
-        $result = $stmt->execute();
-        return $result->fetchArray(SQLITE3_ASSOC);
+    // Save or update a client
+    public function save($id) {
+        $userId = $this->userId;
+        $name = $this->name;
+        $email = $this->email;
+        $billingAddress = $this->billingAddress;
+        $id = $this->id;
+        if ($this->exists($id)) {
+            return $this->update($id, $name, $email, $billingAddress);
+        } else {
+            
+            return $this->create($userId, $name, $email, $billingAddress);
+        }
     }
 
     // Check if a client exists for a user with a given name

@@ -2,22 +2,39 @@
 
 <div class="row">
     <div class="col">
-        <h2>Create New Invoice</h2>
-        <!-- creating for a specific client -->
-        <p>Creating invoice for: <?php echo $client['name']; ?></p>
-        <!-- card with client details -->
-        <div class="card my-5">
-            <div class="card-body">
-                <h5 class="card-title"><?php echo $client['name']; ?></h5>
-                <h6 class="card-subtitle mb-2 text-muted"><?php echo $client['email']; ?></h6>
-                <p class="card-text"><?php echo $client['billing_address']; ?></p>
-            </div>
-        </div>
-
         <!-- form for invoice details -->
         <form action="/invoice/store" method="post">
-            <input type="hidden" name="client_id" value="<?php echo $client['id']; ?>">
-            
+
+            <h2>Create New Invoice</h2>
+            <!-- creating for a specific client -->
+            <p>Creating invoice for: <?php echo $client['name']; ?></p>
+            <?php // if there is a $client, show the client details
+            if ($client) : ?>
+                <input type="hidden" name="client_id" value="<?php echo $client['id']; ?>">
+            <!-- card with client details -->
+            <div class="card my-5">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo $client['name']; ?></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><?php echo $client['email']; ?></h6>
+                    <p class="card-text"><?php echo $client['billing_address']; ?></p>
+
+                </div>
+            </div>
+            <?php endif;
+            // if there is no client, show a select dropdown to choose a client
+            if (!$client) : ?>
+                <div class="form-group my-2">
+                <label for="client_id">Select Client</label>
+                <select name="client_id" class="form-control" required>
+                    <option value="">Select Client</option>
+                    <?php foreach ($clients as $client) : ?>
+                        <option value="<?php echo $client['id']; ?>"><?php echo $client['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <?php endif; ?>
+
+
             <div class="form-group" id="invoice-details">
                 <label for="invoice_date">Invoice Date</label>
                 <input type="date" value="<?php echo date('Y-m-d'); ?>" name="invoice_date" class="form-control" required>
@@ -35,9 +52,7 @@
             <div class="form-group my-3">
                 <h3>Invoice Items</h3>
                 <!-- table for items -->
-                <table 
-                    class="table table-bordered table-striped"
-                id="invoice-items-table">
+                <table class="table table-bordered table-striped" id="invoice-items-table">
                     <thead>
                         <tr>
                             <th>Item</th>
@@ -55,7 +70,7 @@
                             <td>
                                 <span class="subtotal">0.00</span>
                             </td>
-                            <td> <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+                            <td> <button disabled type="button" class="btn btn-danger btn-disabled" onclick="removeRow(this)">Remove</button></td>
                         </tr>
                     </tbody>
 
@@ -63,9 +78,7 @@
                     <tfoot>
                         <tr>
 
-                            <td 
-                            colspan="5"
-                            align="right">
+                            <td colspan="5" align="right">
                                 <button type="button" class="btn btn-primary" onclick="addRow()">Add Item</button>
                             </td>
                         </tr>
@@ -127,8 +140,6 @@
             document.getElementById('total_amount').value = total.toFixed(2);
         }
     });
-
-
 </script>
 
 <?php include 'views/includes/footer.php'; ?>

@@ -9,8 +9,9 @@ class InvoiceController {
         $this->db = $db;
     }
 
-    public function create($client) {
+    public function create($client = null) {
         $client = $client;
+        $clients = (new Client($this->db))->all();
         include 'views/invoice/create.php';
     }
 

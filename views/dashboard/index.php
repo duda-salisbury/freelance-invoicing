@@ -1,30 +1,24 @@
 <?php include 'views/includes/header.php'; ?>
 
 
-<!-- list of links: Add/Edit Clients, Create Invoice, Edit Profile, Manaeg Invoices -->
+<!-- list of links: Add/Edit Clients, Create Invoice, Edit Profile, Manage Invoices, in a simple UL veritcal menu list of links -->
 
 <div class="row">
     <div class="col">
-        <h2>Clients</h2>
-        <a href="/client/list" class="btn btn-primary">View Clients</a>
-        <a href="/client/create" class="btn btn-primary">Add Client</a>
+        <h2>Dashboard</h2>
+        <ul class="list-group my-4">
+            <li class="list-group-item"><a href="/client/list">Clients</a></li>
+            <li class="list-group-item"><a href="/invoice/create">Create Invoice</a></li>
+            <li class="list-group-item"><a href="/profile/edit">Edit Profile</a></li>
+            <li class="list-group-item"><a href="/invoice/list">Manage Invoices</a></li>
+        </ul>
     </div>
 </div>
 
 
-<div class="row">
-    <div class="col">
-        <h2>Invoices</h2>
-        <a href="/invoice/create" class="btn btn-primary">Create Invoice</a>
-        <a href="/invoice/list" class="btn btn-primary">Manage Invoices</a>
-    </div>
 
-    <div class="col">
-        <h2>Profile</h2>
-        <a href="/user/edit" class="btn btn-primary">Edit Profile</a>
-    </div>
 
-</div>
+
 
 
 <?php include 'views/includes/footer.php'; ?>
