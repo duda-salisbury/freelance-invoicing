@@ -35,7 +35,7 @@ class ClientController {
 
     // Show a specific client
     public function show($clientId) {
-        $client = $this->clientModel->find($clientId);
+        $client = new Client($this->db, $clientId);
         $invoices = $client->getInvoices();
         include 'views/client/show.php';
     }

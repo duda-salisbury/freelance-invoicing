@@ -1,18 +1,18 @@
 <?php
+require_once 'models/Invoice.php';
 
 class Client {
     private $db;
     private $id;
-    private $userId;
-    private $name;
-    private $email;
-    private $billingAddress;
+    public $userId;
+    public $name;
+    public $email;
+    public $billingAddress;
+    public $invoices;
 
 
     public function __construct($db, $id=0) {
         $this->db = $db;
-
-
         if ($id > 0) {
             $this->id = $id;
             $stmt = $this->db->prepare("SELECT * FROM clients WHERE id = :id");
@@ -24,6 +24,7 @@ class Client {
             $this->name = $row['name'];
             $this->email = $row['email'];
             $this->billingAddress = $row['billing_address'];
+            $this->invoices = $this->getInvoices();
         } else {
             $this->id = 0;
             $this->userId = 0;
@@ -31,6 +32,10 @@ class Client {
             $this->email = '';
             $this->billingAddress = '';
         }
+    }
+
+    public function getId() {
+        return $this->id;
     }
 
     // Save or update a client
@@ -93,6 +98,17 @@ class Client {
             $clients[] = $row;
         }
         return $clients;
+    }
+
+    public function getInvoices() {
+        $stmt = $this->db->prepare("SELECT * FROM invoices WHERE client_id = :client_id");
+        $stmt->bindValue(':client_id', $this->id, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        $invoices = array();
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $invoices[] = new Invoice($this->db, $row['id']);
+        }
+        return $invoices;
     }
 }
 

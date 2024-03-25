@@ -7,28 +7,28 @@
             <tbody>
                 <tr>
                     <th scope="row">ID</th>
-                    <td><?php echo $client['id']; ?></td>
+                    <td><?php echo $client->getId(); ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Name</th>
-                    <td><?php echo $client['name']; ?></td>
+                    <td><?php echo $client->name; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Email</th>
-                    <td><?php echo $client['email']; ?></td>
+                    <td><?php echo $client->email; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Billing Address</th>
-                    <td><?php echo $client['billing_address']; ?></td>
+                    <td><?php echo $client->billingAddress; ?></td>
                 </tr>
             </tbody>
         </table>
-        <a href="/client/edit/<?php echo $client['id']; ?>" class="btn btn-secondary">Edit</a>
-        <a href="/client/destroy/<?php echo $client['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this client?')">Delete</a>
+        <a href="/client/edit/<?php echo $client->getId(); ?>" class="btn btn-secondary">Edit</a>
+        <a href="/client/destroy/<?php echo $client->getId(); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this client?')">Delete</a>
     </div>
 </div>
 
-<h2>Invoices For <?php echo $client['name']; ?></h2>
+<h2>Invoices For <?php echo $client->name; ?></h2>
 
 <table class="table">
     <thead>
