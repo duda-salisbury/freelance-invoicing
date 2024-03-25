@@ -2,13 +2,54 @@
 
 class Invoice {
     private $db;
+    private $id;
+    public $clientId;
+    public $invoiceDate;
+    public $dueDate;
+    public $total;
+    public $items;
 
-    public function __construct($db) {
+    public function __construct($db, $id=0) {
         $this->db = $db;
+
+        if ($id > 0) {
+            $this->id = $id;
+            $stmt = $this->db->prepare("SELECT * FROM invoices WHERE id = :id");
+            $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+            $result = $stmt->execute();
+            $row = $result->fetchArray(SQLITE3_ASSOC);
+            $this->clientId = $row['client_id'];
+            $this->invoiceDate = $row['invoice_date'];
+            $this->dueDate = $row['due_date'];
+            $this->total = $row['total'];
+            $this->items = $this->getItems();
+        } else {
+            $this->id = 0;
+            $this->clientId = 0;
+            $this->invoiceDate = '';
+            $this->dueDate = '';
+            $this->total = 0;
+        }
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+
+    // Get all items for an invoice
+    public function getItems() {
+        $stmt = $this->db->prepare("SELECT * FROM invoice_items WHERE invoice_id = :invoice_id");
+        $stmt->bindValue(':invoice_id', $this->id, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        $items = [];
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $items[] = $row;
+        }
+        return $items;
     }
 
     // Save or update an invoice
-    public function save($id, $clientId, $invoiceDate, $dueDate, $total) {
+    public function save() {
         if ($this->exists($id)) {
             echo "Updating invoice";
             return $this->update($id, $clientId, $invoiceDate, $dueDate, $total);

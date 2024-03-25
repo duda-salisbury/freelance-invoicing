@@ -39,7 +39,7 @@ class Client {
     }
 
     // Save or update a client
-    public function save($id) {
+    public function save() {
         $userId = $this->userId;
         $name = $this->name;
         $email = $this->email;
