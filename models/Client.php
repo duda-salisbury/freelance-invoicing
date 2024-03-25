@@ -95,7 +95,7 @@ class Client {
         $result = $stmt->execute();
         $clients = array();
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $clients[] = $row;
+            $clients[] = new Client($this->db, $row['id']);
         }
         return $clients;
     }

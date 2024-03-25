@@ -7,28 +7,28 @@
 
             <h2>Create New Invoice</h2>
             <!-- creating for a specific client -->
-            <p>Creating invoice for: <?php echo $client['name']; ?></p>
+            <p>Creating invoice for: <?php echo $client->name; ?></p>
             <?php // if there is a $client, show the client details
-            if ($client) : ?>
-                <input type="hidden" name="client_id" value="<?php echo $client['id']; ?>">
+            if ($client->getId() > 0) : ?>
+                <input type="hidden" name="client_id" value="<?php echo $client->getId(); ?>">
             <!-- card with client details -->
             <div class="card my-5">
                 <div class="card-body">
-                    <h5 class="card-title"><?php echo $client['name']; ?></h5>
-                    <h6 class="card-subtitle mb-2 text-muted"><?php echo $client['email']; ?></h6>
-                    <p class="card-text"><?php echo $client['billing_address']; ?></p>
+                    <h5 class="card-title"><?php echo $client->name; ?></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><?php echo $client->email; ?></h6>
+                    <p class="card-text"><?php echo $client->billingAddress; ?></p>
 
                 </div>
             </div>
             <?php endif;
             // if there is no client, show a select dropdown to choose a client
-            if (!$client) : ?>
+            if ($client->getId() == 0) : ?>
                 <div class="form-group my-2">
                 <label for="client_id">Select Client</label>
                 <select name="client_id" class="form-control" required>
                     <option value="">Select Client</option>
                     <?php foreach ($clients as $client) : ?>
-                        <option value="<?php echo $client['id']; ?>"><?php echo $client['name']; ?></option>
+                        <option value="<?php echo $client->getId(); ?>"><?php echo $client->name; ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

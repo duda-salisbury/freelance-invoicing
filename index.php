@@ -73,7 +73,7 @@ switch ($segments[0]) {
         switch ($segments[1]) {
             case 'create':
                 $clientId = $segments[2];
-                $client = (new Client($db))->find($clientId);
+                $client = new Client($db, $clientId);
                 $invoiceController = new InvoiceController($db);
                 $invoiceController->create($client);
                 break;

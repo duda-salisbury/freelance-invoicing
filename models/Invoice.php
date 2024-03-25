@@ -50,12 +50,18 @@ class Invoice {
 
     // Save or update an invoice
     public function save() {
+        $id = $this->id;
+        $clientId = $this->clientId;
+        $invoiceDate = $this->invoiceDate;
+        $dueDate = $this->dueDate;
+        $total = $this->total;
+        $items = $this->items;
         if ($this->exists($id)) {
-            echo "Updating invoice";
-            return $this->update($id, $clientId, $invoiceDate, $dueDate, $total);
+            return $this->update($id, $clientId, $invoiceDate, $dueDate, $total, $items);
         } else {
             echo "Creating invoice";
-            return $this->create($clientId, $invoiceDate, $dueDate, $total);
+
+            return $this->create($clientId, $invoiceDate, $dueDate, $total, $items);
         }
     }
 
