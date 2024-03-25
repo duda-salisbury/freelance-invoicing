@@ -16,16 +16,27 @@ class InvoiceController {
     }
 
     public function store($id, $clientId, $invoiceDate, $dueDate, $total) {
-        $invoice = new Invoice($this->db);
-        $invoice->save($id, $clientId, $invoiceDate, $dueDate, $total);
 
-        // redirect to the invoice show page
-        header('Location: /invoice/show/' . $invoice->id);
+
+        $invoice = new Invoice($this->db, $id);
+        $invoice->clientId = $clientId;
+        $invoice->invoiceDate = $invoiceDate;
+        $invoice->dueDate = $dueDate;
+        $invoice->total = $total;
+        $invoice->status = 'draft';
+        $invoice->userId = "1";
+
+
+
+        return $invoice->save($id);
+
+
     }
 
     public function show($id) {
-        $invoice = (new Invoice($this->db))->find($id);
-        $invoiceItems = (new InvoiceItem($this->db))->all($id);
+        $invoice = new Invoice($this->db, $id);
+        $invoiceItems = $invoice->getItems();
+        $client = $invoice->getClient();
         include 'views/invoice/show.php';
     }
 }

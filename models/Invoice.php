@@ -3,10 +3,12 @@
 class Invoice {
     private $db;
     private $id;
+    public $userId;
     public $clientId;
     public $invoiceDate;
     public $dueDate;
     public $total;
+    public $status;
     public $items;
 
     public function __construct($db, $id=0) {
@@ -18,22 +20,31 @@ class Invoice {
             $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
             $result = $stmt->execute();
             $row = $result->fetchArray(SQLITE3_ASSOC);
+            $this->userId = $row['user_id'];
             $this->clientId = $row['client_id'];
             $this->invoiceDate = $row['invoice_date'];
             $this->dueDate = $row['due_date'];
             $this->total = $row['total'];
+            $this->status = $row['status'];
             $this->items = $this->getItems();
+
         } else {
             $this->id = 0;
             $this->clientId = 0;
             $this->invoiceDate = '';
             $this->dueDate = '';
+            $this->status = '';
             $this->total = 0;
+            $this->userId = 0;
         }
     }
 
     public function getId() {
         return $this->id;
+    }
+
+    public function getClient() {
+        return (new Client($this->db, $this->clientId));
     }
 
     // Get all items for an invoice
@@ -57,11 +68,9 @@ class Invoice {
         $total = $this->total;
         $items = $this->items;
         if ($this->exists($id)) {
-            return $this->update($id, $clientId, $invoiceDate, $dueDate, $total, $items);
+            return $this->update();
         } else {
-            echo "Creating invoice";
-
-            return $this->create($clientId, $invoiceDate, $dueDate, $total, $items);
+            return $this->create();
         }
     }
 
@@ -82,13 +91,38 @@ class Invoice {
     }
 
     // Create a new invoice
-    private function create($clientId, $invoiceDate, $dueDate, $total) {
-        echo "insert into invoices (client_id, invoice_date, due_date, total) values ($clientId, $invoiceDate, $dueDate, $total)";
-        $stmt = $this->db->prepare("INSERT INTO invoices (client_id, invoice_date, due_date, total_amount) VALUES (:client_id, :invoice_date, :due_date, :total)");
+    private function create() {
+        $invoiceDate = $this->invoiceDate;
+        $dueDate = $this->dueDate;
+        $total = $this->total;
+        $clientId = $this->clientId;
+        $userId = $this->userId;
+        $status = $this->status;
+        
+        $sql = "INSERT INTO invoices (client_id, user_id, invoice_date, due_date, total_amount, status) 
+                VALUES (:client_id, :user_id, :invoice_date, :due_date, :total, :status)";
+        
+        // Replace placeholders with actual values
+        $sqlWithValues = str_replace(
+            array(':client_id', ':user_id', ':invoice_date', ':due_date', ':total', ':status'),
+            array($clientId, $userId, $invoiceDate, $dueDate, $total, $status),
+            $sql
+        );
+        
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':user_id', $this->userId, SQLITE3_INTEGER);
         $stmt->bindValue(':client_id', $clientId, SQLITE3_INTEGER);
         $stmt->bindValue(':invoice_date', $invoiceDate, SQLITE3_TEXT);
         $stmt->bindValue(':due_date', $dueDate, SQLITE3_TEXT);
+        $stmt->bindValue(':status', $status, SQLITE3_TEXT);
         $stmt->bindValue(':total', $total, SQLITE3_FLOAT);
+        
+        
+
+    
+
+
         $stmt->execute();
         if ($stmt->execute()) {
             return $this->db->lastInsertRowID();
@@ -98,12 +132,23 @@ class Invoice {
     }
 
     // Update an invoice
-    private function update($id, $clientId, $invoiceDate, $dueDate, $total) {
-        $stmt = $this->db->prepare("UPDATE invoices SET client_id = :client_id, invoice_date = :invoice_date, due_date = :due_date, total = :total WHERE id = :id");
+    private function update() {
+        $id = $this->id;
+        $clientId = $this->clientId;
+        $invoiceDate = $this->invoiceDate;
+        $dueDate = $this->dueDate;
+        $total = $this->total;
+        $status = $this->status;
+        $userId = $this->userId;
+
+
+        $stmt = $this->db->prepare("UPDATE invoices SET user_id=:user_id, client_id = :client_id, invoice_date, status = :invoice_date, due_date = :due_date, total = :total, status=:status WHERE id = :id");
+        $stmt->bindValue(':user_id', $this->userId, SQLITE3_INTEGER);
         $stmt->bindValue(':client_id', $clientId, SQLITE3_INTEGER);
         $stmt->bindValue(':invoice_date', $invoiceDate, SQLITE3_TEXT);
         $stmt->bindValue(':due_date', $dueDate, SQLITE3_TEXT);
         $stmt->bindValue(':total', $total, SQLITE3_FLOAT);
+        $stmt->bindValue(':status', $status, SQLITE3_TEXT);
         $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
         return $stmt->execute();
     }

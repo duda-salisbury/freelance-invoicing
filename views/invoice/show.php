@@ -7,19 +7,19 @@
             <tbody>
                 <tr>
                     <th scope="row">ID</th>
-                    <td><?php echo $client['id']; ?></td>
+                    <td><?php echo $client->getId(); ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Name</th>
-                    <td><?php echo $client['name']; ?></td>
+                    <td><?php echo $client->name; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Email</th>
-                    <td><?php echo $client['email']; ?></td>
+                    <td><?php echo $client->email; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Billing Address</th>
-                    <td><?php echo $client['billing_address']; ?></td>
+                    <td><?php echo $client->billingAddress; ?></td>
                 </tr>
             </tbody>
         </table>
@@ -30,19 +30,19 @@
             <tbody>
                 <tr>
                     <th scope="row">ID</th>
-                    <td><?php echo $invoice['id']; ?></td>
+                    <td><?php echo $invoice->getId(); ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Invoice Date</th>
-                    <td><?php echo $invoice['invoice_date']; ?></td>
+                    <td><?php echo $invoice->invoiceDate; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Due Date</th>
-                    <td><?php echo $invoice['due_date']; ?></td>
+                    <td><?php echo $invoice->dueDate; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Total</th>
-                    <td><?php echo $invoice['total']; ?></td>
+                    <td><?php echo $invoice->total; ?></td>
                 </tr>
             </tbody>
         </table>
@@ -71,7 +71,7 @@
                 <tr>
                     <!-- total -->
                     <td colspan="3">Total</td>
-                    <td><?php echo $invoice['total']; ?></td>
+                    <td><?php echo $invoice->total; ?></td>
                 </tr>
             </tfoot>
         </table>

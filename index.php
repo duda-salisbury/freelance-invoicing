@@ -86,9 +86,12 @@ switch ($segments[0]) {
                 $total = $_POST['total_amount'];
 
                 $invoiceController = new InvoiceController($db);
-                $id = $invoiceController->store($id, $clientId, $invoiceDate, $dueDate, $total);
+                $success = $invoiceController->store($id, $clientId, $invoiceDate, $dueDate, $total);
 
-
+                // Redirect to the invoice show page
+                if ($success) {
+                    header("Location: /invoice/show/$success");
+                }
 
                 break;
 
