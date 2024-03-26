@@ -77,6 +77,12 @@ switch ($segments[0]) {
                 $invoiceController = new InvoiceController($db);
                 $invoiceController->create($client);
                 break;
+            
+            case 'destroy':
+                $id = $segments[2];
+                $invoiceController = new InvoiceController($db);
+                $invoiceController->delete($id);
+                break;
 
             case 'store':
                 $id = $_POST['id'] ?? 0;
@@ -85,8 +91,23 @@ switch ($segments[0]) {
                 $dueDate = $_POST['due_date'];
                 $total = $_POST['total_amount'];
 
+               
+
+                $items = [];
+
+                for ($i = 0; $i < count($_POST['description']); $i++) {
+                    $items[] = [
+                        'description' => $_POST['description'][$i],
+                        'quantity' => $_POST['quantity'][$i],
+                        'unit_price' => $_POST['unit_price'][$i],
+                    ];
+                }
+
                 $invoiceController = new InvoiceController($db);
-                $success = $invoiceController->store($id, $clientId, $invoiceDate, $dueDate, $total);
+                $success = $invoiceController->store($id, $clientId, $invoiceDate, $dueDate, $total, $items);
+
+
+
 
                 // Redirect to the invoice show page
                 if ($success) {

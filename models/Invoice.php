@@ -1,4 +1,5 @@
 <?php
+require_once 'InvoiceItem.php';
 
 class Invoice {
     private $db;
@@ -9,6 +10,8 @@ class Invoice {
     public $dueDate;
     public $total;
     public $status;
+
+    // an array of InvoiceItem objects
     public $items;
 
     public function __construct($db, $id=0) {
@@ -24,7 +27,7 @@ class Invoice {
             $this->clientId = $row['client_id'];
             $this->invoiceDate = $row['invoice_date'];
             $this->dueDate = $row['due_date'];
-            $this->total = $row['total'];
+            $this->total = $row['total_amount'];
             $this->status = $row['status'];
             $this->items = $this->getItems();
 
@@ -50,12 +53,14 @@ class Invoice {
     // Get all items for an invoice
     public function getItems() {
         $stmt = $this->db->prepare("SELECT * FROM invoice_items WHERE invoice_id = :invoice_id");
+ 
         $stmt->bindValue(':invoice_id', $this->id, SQLITE3_INTEGER);
         $result = $stmt->execute();
         $items = [];
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $items[] = $row;
+            $items[] = new InvoiceItem($this->db, $row['id']);
         }
+ 
         return $items;
     }
 
@@ -102,14 +107,6 @@ class Invoice {
         $sql = "INSERT INTO invoices (client_id, user_id, invoice_date, due_date, total_amount, status) 
                 VALUES (:client_id, :user_id, :invoice_date, :due_date, :total, :status)";
         
-        // Replace placeholders with actual values
-        $sqlWithValues = str_replace(
-            array(':client_id', ':user_id', ':invoice_date', ':due_date', ':total', ':status'),
-            array($clientId, $userId, $invoiceDate, $dueDate, $total, $status),
-            $sql
-        );
-        
-        
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':user_id', $this->userId, SQLITE3_INTEGER);
         $stmt->bindValue(':client_id', $clientId, SQLITE3_INTEGER);
@@ -117,13 +114,7 @@ class Invoice {
         $stmt->bindValue(':due_date', $dueDate, SQLITE3_TEXT);
         $stmt->bindValue(':status', $status, SQLITE3_TEXT);
         $stmt->bindValue(':total', $total, SQLITE3_FLOAT);
-        
-        
 
-    
-
-
-        $stmt->execute();
         if ($stmt->execute()) {
             return $this->db->lastInsertRowID();
         } else {
@@ -154,7 +145,8 @@ class Invoice {
     }
 
     // Delete an invoice
-    public function delete($invoiceId) {
+    public function delete() {
+        $invoiceId = $this->id;
         $stmt = $this->db->prepare("DELETE FROM invoices WHERE id = :id");
         $stmt->bindValue(':id', $invoiceId, SQLITE3_INTEGER);
         return $stmt->execute();

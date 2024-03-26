@@ -27,9 +27,20 @@
         <a href="/client/destroy/<?php echo $client->getId(); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this client?')">Delete</a>
     </div>
 </div>
+<div class="row my-5">
+    <div class="col">
 
 <h2>Invoices For <?php echo $client->name; ?></h2>
 
+<a href="/invoice/create/<?php echo $client->getId(); ?>" class="btn btn-primary">Create Invoice</a>
+
+<?php if (count($invoices) == 0): ?>
+    <div class="alert alert-info mt-3" role="alert">
+        No invoices found for this client.
+    </div>
+<?php endif; ?>
+
+<?php if (count($invoices) > 0) : ?>
 <table class="table">
     <thead>
         <tr>
@@ -43,18 +54,22 @@
     <tbody>
         <?php foreach ($invoices as $invoice): ?>
             <tr>
-                <td><?php echo $invoice['id']; ?></td>
-                <td><?php echo $invoice['invoice_date']; ?></td>
-                <td><?php echo $invoice['due_date']; ?></td>
-                <td><?php echo $invoice['total']; ?></td>
+                <td><?php echo $invoice->getId(); ?></td>
+                <td><?php echo $invoice->invoiceDate; ?></td>
+                <td><?php echo $invoice->dueDate; ?></td>
+                <td><?php echo $invoice->total; ?></td>
                 <td>
-                    <a href="/invoice/show/<?php echo $invoice['id']; ?>" class="btn btn-primary">View</a>
-                    <a href="/invoice/edit/<?php echo $invoice['id']; ?>" class="btn btn-secondary">Edit</a>
-                    <a href="/invoice/destroy/<?php echo $invoice['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this invoice?')">Delete</a>
+                    <a href="/invoice/show/<?php echo $invoice->getId(); ?>" class="btn btn-primary">View</a>
+                    <a href="/invoice/edit/<?php echo $invoice->getId(); ?>" class="btn btn-secondary">Edit</a>
+                    <a href="/invoice/destroy/<?php echo $invoice->getId(); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this invoice?')">Delete</a>
                 </td>
             </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+<?php endif; ?>
+<a href="/invoice/create/<?php echo $client->getId(); ?>" class="btn btn-primary">Create Invoice</a>
+    </div>
+</div>
 
 <?php include 'views/includes/footer.php'; ?>

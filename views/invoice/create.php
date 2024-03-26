@@ -64,6 +64,8 @@
                     </thead>
                     <tbody id="invoice-items">
                         <tr>
+                            <!-- hidden input for item id -->
+                            <input type="hidden" name="item_id[]" value="0">
                             <td><input type="text" name="description[]" class="form-control" required></td>
                             <td><input type="number" name="quantity[]" class="form-control" required></td>
                             <td><input type="number" name="unit_price[]" class="form-control" required></td>

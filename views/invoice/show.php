@@ -60,10 +60,10 @@
             <tbody>
                 <?php foreach ($invoiceItems as $item) : ?>
                     <tr>
-                        <td><?php echo $item['description']; ?></td>
-                        <td><?php echo $item['quantity']; ?></td>
-                        <td><?php echo $item['unit_price']; ?></td>
-                        <td><?php echo $item['total']; ?></td>
+                        <td><?php echo $item->description; ?></td>
+                        <td><?php echo $item->quantity; ?></td>
+                        <td><?php echo $item->unitPrice; ?></td>
+                        <td><?php echo $item->getTotal(); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
