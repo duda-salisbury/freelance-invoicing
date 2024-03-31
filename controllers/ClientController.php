@@ -29,7 +29,14 @@ class ClientController {
     }
 
     public function store($id=0,$user_id, $name, $email, $billing_address){
-        $this->clientModel->save($id,$user_id, $name, $email, $billing_address);
+        $client = new Client($this->db, $id);
+        $client->userId = $user_id;
+        $client->name = $name;
+        $client->email = $email;
+        $client->billingAddress = $billing_address;
+        $client->save();
+
+
         header('Location: /client/list');
     }
 
@@ -43,7 +50,9 @@ class ClientController {
     // Update a client
     public function edit($id) {
         $clientId = $id;
-        $client = $this->clientModel->find($clientId);
+        $client = new Client($this->db, $clientId);
+
+        
         include 'views/client/edit.php';
     }
 
