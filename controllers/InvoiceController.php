@@ -17,6 +17,14 @@ class InvoiceController {
         include 'views/invoice/create.php';
     }
 
+    public function edit($id) {
+        $invoice = new Invoice($this->db, $id);
+        $client = $invoice->getClient();
+        $clients = (new Client($this->db))->all();
+        $invoiceItems = $invoice->getItems();
+        include 'views/invoice/edit.php';
+    }
+
     public function store($id, $clientId, $invoiceDate, $dueDate, $total, $items) {
 
 

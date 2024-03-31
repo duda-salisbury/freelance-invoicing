@@ -121,6 +121,11 @@ switch ($segments[0]) {
                 // load the view
                 $invoiceController->show($segments[2]);
                 break;
+            case 'edit':
+                $invoiceController = new InvoiceController($db);
+                $invoiceController->edit($segments[2]);
+                break;
+                
             default:
                 // Handle unknown invoice routes
                 header("HTTP/1.0 404 Not Found");

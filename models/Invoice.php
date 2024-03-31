@@ -23,7 +23,7 @@ class Invoice {
             $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
             $result = $stmt->execute();
             $row = $result->fetchArray(SQLITE3_ASSOC);
-            $this->userId = $row['user_id'];
+            $this->userId = 0;
             $this->clientId = $row['client_id'];
             $this->invoiceDate = $row['invoice_date'];
             $this->dueDate = $row['due_date'];
@@ -130,11 +130,13 @@ class Invoice {
         $dueDate = $this->dueDate;
         $total = $this->total;
         $status = $this->status;
-        $userId = $this->userId;
+        $userId = 1;
+        
+        $query = "UPDATE invoices SET client_id = :client_id, user_id = :user_id, invoice_date = :invoice_date, due_date = :due_date, total_amount = :total, status = :status WHERE id = :id";
+        $stmt = $this->db->prepare($query);
 
 
-        $stmt = $this->db->prepare("UPDATE invoices SET user_id=:user_id, client_id = :client_id, invoice_date, status = :invoice_date, due_date = :due_date, total = :total, status=:status WHERE id = :id");
-        $stmt->bindValue(':user_id', $this->userId, SQLITE3_INTEGER);
+        $stmt->bindValue(':user_id', $userId, SQLITE3_INTEGER);
         $stmt->bindValue(':client_id', $clientId, SQLITE3_INTEGER);
         $stmt->bindValue(':invoice_date', $invoiceDate, SQLITE3_TEXT);
         $stmt->bindValue(':due_date', $dueDate, SQLITE3_TEXT);
