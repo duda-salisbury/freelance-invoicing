@@ -66,6 +66,7 @@ class Invoice {
 
     // Save or update an invoice
     public function save() {
+
         $id = $this->id;
         $clientId = $this->clientId;
         $invoiceDate = $this->invoiceDate;
@@ -73,6 +74,7 @@ class Invoice {
         $total = $this->total;
         $items = $this->items;
         if ($this->exists($id)) {
+            die("Exists");
             return $this->update();
         } else {
             return $this->create();
@@ -115,11 +117,15 @@ class Invoice {
         $stmt->bindValue(':status', $status, SQLITE3_TEXT);
         $stmt->bindValue(':total', $total, SQLITE3_FLOAT);
 
-        if ($stmt->execute()) {
-            return $this->db->lastInsertRowID();
+        // execute the statment and die if it fails
+        if (!$stmt->execute()) {
+            die("Error creating invoice");
         } else {
-            return false;
+            return $this->db->lastInsertRowID();    
         }
+
+
+        
     }
 
     // Update an invoice

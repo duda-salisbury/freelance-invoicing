@@ -81,9 +81,12 @@ class InvoiceItem {
         $stmt->bindValue(':quantity', $quantity, SQLITE3_INTEGER);
         $stmt->bindValue(':unit_price', $unitPrice, SQLITE3_FLOAT);
         $stmt->bindValue(':total', $this->getTotal(), SQLITE3_FLOAT);
-        $stmt->execute();
 
-        // debug if the insert was successful by spitting out the last inserted row details
+        // execute the query but echo an error if it fails
+        if (!$stmt->execute()) {
+            echo $this->db->lastErrorMsg();
+        }
+        
 
         return $this->db->lastInsertRowID();
     }

@@ -27,6 +27,7 @@ class InvoiceController {
 
     public function store($id, $clientId, $invoiceDate, $dueDate, $total, $items) {
 
+        //die ("here's the content: $id, $clientId, $invoiceDate, $dueDate, $total, $items");
 
         $invoice = new Invoice($this->db, $id);
         $invoice->clientId = $clientId;
@@ -37,19 +38,26 @@ class InvoiceController {
         $invoice->userId = "1";
 
         $id = $invoice->save();
-            
         foreach ($items as $item) {
-            $invoiceItem = new InvoiceItem($this->db);
+            if ($item['item_id']> 0) {
+                $invoiceItem = new InvoiceItem($this->db, $item['item_id']);
+            } else {
+                $invoiceItem = new InvoiceItem($this->db);
+                echo "new item";
+            }
             $invoiceItem->invoiceId = $id;
             $invoiceItem->description = $item['description'];
             $invoiceItem->quantity = $item['quantity'];
             $invoiceItem->unitPrice = $item['unit_price'];
             $invoiceItem->setTotal($invoiceItem->getTotal());
-            $invoiceItem->save();
+            echo $invoiceItem->save();
+            
         }
 
-        return $id;
-        
+        // redirect to show/invoiceId
+
+        header("Location: /invoice/show/$id");
+
     }
 
     public function delete($id) {

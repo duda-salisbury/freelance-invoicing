@@ -71,7 +71,10 @@ $db->exec("CREATE TABLE IF NOT EXISTS invoice_items (
     total DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 )");
+                        
+                                     
 
-echo "Database and tables created successfully.";
+
+echo "\n\n Database and tables created successfully. \n\n";
 
 ?>

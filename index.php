@@ -97,6 +97,7 @@ switch ($segments[0]) {
 
                 for ($i = 0; $i < count($_POST['description']); $i++) {
                     $items[] = [
+                        'item_id' => $_POST['item_id'][$i],
                         'description' => $_POST['description'][$i],
                         'quantity' => $_POST['quantity'][$i],
                         'unit_price' => $_POST['unit_price'][$i],
